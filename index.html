@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MouseUp, MouseDown, MouseOver y figuras</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let drawSquareNext = true;
+        let isDrawing = false;
+
+        function getRandomColor() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgba(${r}, ${g}, ${b}, 0.7)`;
+        }
+
+        function drawCircle(x, y, size = 10, color = 'rgba(0, 0, 0, 0.7)') {
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        function drawSquare(x, y, size = 50, color = 'rgba(0, 150, 255, 0.7)') {
+            ctx.fillStyle = color;
+            ctx.fillRect(x - size / 2, y - size / 2, size, size);
+        }
+
+        function onCanvasClick(event) {
+            const x = event.clientX - canvas.getBoundingClientRect().left;
+            const y = event.clientY - canvas.getBoundingClientRect().top;
+            const color = getRandomColor();
+
+            if (drawSquareNext) {
+                drawSquare(x, y, 50, color); 
+            } else {
+                drawCircle(x, y, 25, color);
+            }
+        }
+
+        function onMouseEnter() {
+            drawSquareNext = !drawSquareNext;
+        }
+
+        function onMouseMove(event) {
+            if (isDrawing) {
+                const x = event.clientX - canvas.getBoundingClientRect().left;
+                const y = event.clientY - canvas.getBoundingClientRect().top;
+
+                drawCircle(x, y, 5, 'rgba(0, 0, 0, 0.6)');
+            }
+        }
+
+        function onMouseDown() {
+            isDrawing = true;
+        }
+
+        function onMouseUp() {
+            isDrawing = false;
+        }
+
+        canvas.addEventListener('click', onCanvasClick);
+        canvas.addEventListener('mouseenter', onMouseEnter);
+        canvas.addEventListener('mousemove', onMouseMove);
+        canvas.addEventListener('mousedown', onMouseDown);
+        canvas.addEventListener('mouseup', onMouseUp);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
